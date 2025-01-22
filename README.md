@@ -1,3 +1,5 @@
+////////////********* Создание необходимых таблиц *********///////////
+
 CREATE TABLE passports(
 id varchar not null primary key,
 first_name varchar(30),
@@ -76,13 +78,80 @@ foreign key (service_id) references services(id)
 )
 
 
+////************* Добавление данных в таблицы *************/////////
 
-SELECT * FROM passports;
-SELECT * FROM aircrafts;
-SELECT * FROM airlines;
-SELECT * FROM flights_info;
-SELECT * FROM passengers;
-SELECT * FROM services;
-SELECT * FROM tickets;
-SELECT * FROM airline_service;
-SELECT * FROM passenger_service;
+Passport passport = new Passport(
+LocalDate.now().toString(),
+LocalDate.now().toString(),
+"Viktoria",
+"Demchuk",
+SexType.MALE,
+"Belarus",
+Date.valueOf("1999-05-10")
+);
+
+            Passenger passenger = new Passenger(
+                    LocalDate.now().toString(),
+                    LocalDate.now().toString(),
+                    "no",
+                    21.3d
+            );
+
+            Airline airline = new Airline(
+                    LocalDate.now().toString(),
+                    LocalDate.now().toString(),
+                    "Belavia",
+                    "BRU",
+                    AirlineType.INTERNATIONAL
+            );
+
+            Aircraft aircraft = new Aircraft(
+                    LocalDate.now().toString(),
+                    LocalDate.now().toString(),
+                    "Boeing",
+                    "737-800",
+                    "2384XC7"
+            );
+
+            FlightInfo flightInfo = new FlightInfo(
+                    LocalDate.now().toString(),
+                    LocalDate.now().toString(),
+                    "22012025TH",
+                    Date.valueOf("2025-01-22"),
+                    Time.valueOf("20:06:00"),
+                    Date.valueOf("2025-01-23"),
+                    Time.valueOf("02:12:00")
+            );
+
+            Ticket ticket = new Ticket(
+                    LocalDate.now().toString(),
+                    LocalDate.now().toString(),
+                    "432FS195"
+            );
+
+            Service service = new Service(
+                    LocalDate.now().toString(),
+                    LocalDate.now().toString(),
+                    "Upgrade to business",
+                    100.0d
+            );
+
+            passenger.addService(service);
+            passenger.addTicket(ticket);
+            passport.addTicket(ticket);
+            aircraft.addFlightInfoToAircraft(flightInfo);
+            airline.addAircraft(aircraft);
+            airline.addService(service);
+            airline.addFlight(flightInfo);
+            flightInfo.addTicket(ticket);
+            service.addAirline(airline);
+            service.addPassenger(passenger);
+            passenger.setPassport(passport);
+
+            session.save(passport);
+            session.save(airline);
+            session.save(aircraft);
+            session.save(flightInfo);
+            session.save(ticket);
+            session.save(service);
+            session.save(passenger);
