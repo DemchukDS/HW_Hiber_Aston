@@ -1,8 +1,8 @@
 package com.demchukDS.aston.entities;
 
+import com.demchukDS.aston.DataManager;
 import com.demchukDS.aston.src.SexType;
 import jakarta.persistence.*;
-import lombok.Data;
 
 import java.sql.Date;
 import java.util.HashSet;
@@ -10,10 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "passports")
-public class Passport {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+public class Passport extends DataManager {
 
     @Column(name = "first_name")
     private String firstName;
@@ -42,7 +39,8 @@ public class Passport {
         ticket.setPassport(this);
     }
 
-    public Passport(String firstName, String lastName, SexType sexType, String nationality, Date dateOfBirth) {
+    public Passport(String createdAt, String updatedAt, String firstName, String lastName, SexType sexType, String nationality, Date dateOfBirth) {
+        super(createdAt, updatedAt);
         this.firstName = firstName;
         this.lastName = lastName;
         this.sexType = sexType;
@@ -51,14 +49,6 @@ public class Passport {
     }
 
     public Passport() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getFirstName() {
@@ -120,8 +110,7 @@ public class Passport {
     @Override
     public String toString() {
         return "Passport{" +
-                "id='" + id + '\'' +
-                ", firstName='" + firstName + '\'' +
+                "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", sexType=" + sexType +
                 ", nationality='" + nationality + '\'' +

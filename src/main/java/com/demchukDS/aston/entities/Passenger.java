@@ -1,17 +1,14 @@
 package com.demchukDS.aston.entities;
 
+import com.demchukDS.aston.DataManager;
 import jakarta.persistence.*;
-import lombok.Data;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "passengers")
-public class Passenger {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+public class Passenger extends DataManager {
 
     @Column(name = "allergy")
     private String allergy;
@@ -44,17 +41,10 @@ public class Passenger {
     public Passenger() {
     }
 
-    public Passenger(String allergy, Double ammountOfBagage) {
+    public Passenger(String createdAt, String updatedAt, String allergy, Double ammountOfBagage) {
+        super(createdAt, updatedAt);
         this.allergy = allergy;
         this.ammountOfBagage = ammountOfBagage;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getAllergy() {
@@ -100,8 +90,7 @@ public class Passenger {
     @Override
     public String toString() {
         return "Passenger{" +
-                "id='" + id + '\'' +
-                ", allergy='" + allergy + '\'' +
+                "allergy='" + allergy + '\'' +
                 ", ammountOfBagage=" + ammountOfBagage +
                 ", passport=" + passport +
                 ", tickets=" + tickets +

@@ -10,6 +10,7 @@ import org.hibernate.cfg.Configuration;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
 
 public class HwTask2 {
     public static void main(String[] args) {
@@ -21,6 +22,8 @@ public class HwTask2 {
             tx = session.beginTransaction();
 
             Passport passport = new Passport(
+                    LocalDate.now().toString(),
+                    LocalDate.now().toString(),
                     "Dmitriy",
                     "Demchuk",
                     SexType.MALE,
@@ -28,21 +31,32 @@ public class HwTask2 {
                     Date.valueOf("1995-06-06")
             );
 
-            Passenger passenger = new Passenger("no", 21.3d);
+            Passenger passenger = new Passenger(
+                    LocalDate.now().toString(),
+                    LocalDate.now().toString(),
+                    "no",
+                    21.3d
+            );
 
             Airline airline = new Airline(
+                    LocalDate.now().toString(),
+                    LocalDate.now().toString(),
                     "Belavia",
                     "BRU",
                     AirlineType.INTERNATIONAL
-                    );
+            );
 
             Aircraft aircraft = new Aircraft(
+                    LocalDate.now().toString(),
+                    LocalDate.now().toString(),
                     "Boeing",
                     "737-800",
                     "2384XC7"
             );
 
             FlightInfo flightInfo = new FlightInfo(
+                    LocalDate.now().toString(),
+                    LocalDate.now().toString(),
                     "22012025TH",
                     Date.valueOf("2025-01-22"),
                     Time.valueOf("20:06:00"),
@@ -50,9 +64,18 @@ public class HwTask2 {
                     Time.valueOf("02:12:00")
             );
 
-            Ticket ticket = new Ticket("432FS195");
+            Ticket ticket = new Ticket(
+                    LocalDate.now().toString(),
+                    LocalDate.now().toString(),
+                    "432FS195"
+            );
 
-            Service service = new Service("Upgrade to business", 100.0d);
+            Service service = new Service(
+                    LocalDate.now().toString(),
+                    LocalDate.now().toString(),
+                    "Upgrade to business",
+                    100.0d
+            );
 
             passenger.addService(service);
             passenger.addTicket(ticket);

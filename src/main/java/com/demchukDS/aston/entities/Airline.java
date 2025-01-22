@@ -1,18 +1,15 @@
 package com.demchukDS.aston.entities;
 
+import com.demchukDS.aston.DataManager;
 import com.demchukDS.aston.src.AirlineType;
 import jakarta.persistence.*;
-import lombok.Data;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "airlines")
-public class Airline {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+public class Airline extends DataManager {
 
     @Column(name = "airline_name")
     private String airlineName;
@@ -52,18 +49,11 @@ public class Airline {
     public Airline() {
     }
 
-    public Airline(String airlineName, String airlineCode, AirlineType airlineType) {
+    public Airline(String createdAt, String updatedAt, String airlineName, String airlineCode, AirlineType airlineType) {
+        super(createdAt, updatedAt);
         this.airlineName = airlineName;
         this.airlineCode = airlineCode;
         this.airlineType = airlineType.toString();
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getAirlineName() {
@@ -117,11 +107,11 @@ public class Airline {
     @Override
     public String toString() {
         return "Airline{" +
-                "id='" + id + '\'' +
-                ", airlineName='" + airlineName + '\'' +
+                "airlineName='" + airlineName + '\'' +
                 ", airlineCode='" + airlineCode + '\'' +
                 ", airlineType='" + airlineType + '\'' +
                 ", flights=" + flights +
+                ", aircrafts=" + aircrafts +
                 ", services=" + services +
                 '}';
     }

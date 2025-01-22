@@ -1,17 +1,14 @@
 package com.demchukDS.aston.entities;
 
+import com.demchukDS.aston.DataManager;
 import jakarta.persistence.*;
-import lombok.Data;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "services")
-public class Service {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+public class Service extends DataManager {
 
     @Column(name = "service_description")
     private String description;
@@ -38,7 +35,8 @@ public class Service {
     public Service() {
     }
 
-    public Service(String description, Double price) {
+    public Service(String createdAt, String updatedAt, String description, Double price) {
+        super(createdAt, updatedAt);
         this.description = description;
         this.price = price;
     }
@@ -49,14 +47,6 @@ public class Service {
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getDescription() {
@@ -86,8 +76,8 @@ public class Service {
     @Override
     public String toString() {
         return "Service{" +
-                "id='" + id + '\'' +
-                ", description='" + description + '\'' +
+                "description='" + description + '\'' +
+                ", price=" + price +
                 ", passengers=" + passengers +
                 ", airlines=" + airlines +
                 '}';

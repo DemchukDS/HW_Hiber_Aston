@@ -1,7 +1,7 @@
 package com.demchukDS.aston.entities;
 
+import com.demchukDS.aston.DataManager;
 import jakarta.persistence.*;
-import lombok.Data;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -10,10 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "flights_info")
-public class FlightInfo {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+public class FlightInfo extends DataManager {
 
     @Column(name = "flight_number")
     private String flightNo;
@@ -49,20 +46,13 @@ public class FlightInfo {
     public FlightInfo() {
     }
 
-    public FlightInfo(String flightNo, Date dateOfDeparture, Time timeOfDeparture, Date dateOfArrival, Time timeOfArrival) {
+    public FlightInfo(String createdAt, String updatedAt, String flightNo, Date dateOfDeparture, Time timeOfDeparture, Date dateOfArrival, Time timeOfArrival) {
+        super(createdAt, updatedAt);
         this.flightNo = flightNo;
         this.dateOfDeparture = dateOfDeparture;
         this.timeOfDeparture = timeOfDeparture;
         this.dateOfArrival = dateOfArrival;
         this.timeOfArrival = timeOfArrival;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getFlightNo() {
@@ -132,8 +122,7 @@ public class FlightInfo {
     @Override
     public String toString() {
         return "FlightInfo{" +
-                "id='" + id + '\'' +
-                ", flightNo='" + flightNo + '\'' +
+                "flightNo='" + flightNo + '\'' +
                 ", dateOfDeparture=" + dateOfDeparture +
                 ", timeOfDeparture=" + timeOfDeparture +
                 ", dateOfArrival=" + dateOfArrival +
