@@ -22,12 +22,7 @@ public class HwTask2 {
         try {
             tx = session.beginTransaction();
 
-            List<Passenger> passengers = session.createQuery("select e from Passenger e", Passenger.class).list();
 
-            for (Passenger passenger : passengers) {
-                System.out.println("Passenger Name: " + passenger.getPassport().getFirstName() +
-                        " " + passenger.getPassport().getLastName());
-            }
 
             tx.commit();
         }
