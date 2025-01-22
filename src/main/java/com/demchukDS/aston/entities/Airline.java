@@ -2,37 +2,52 @@ package com.demchukDS.aston.entities;
 
 import com.demchukDS.aston.src.AirlineType;
 import jakarta.persistence.*;
+import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "airline")
+@Table(name = "airlines")
 public class Airline {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private Long id;
+    private String id;
 
     @Column(name = "airline_name")
-    String airlineName;
+    private String airlineName;
 
     @Column(name = "airline_code")
-    String airlineCode;
+    private String airlineCode;
 
-    @Column (name = "airline_type")
-    @Enumerated(EnumType.STRING)
-    AirlineType airlineType;
+    @Column(name = "airline_type")
+    private String airlineType;
 
-    @OneToMany(mappedBy = "airline", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private Set<FlightInfo> flightInfo;
+    @OneToMany (mappedBy = "airline", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Set<FlightInfo> flights = new HashSet<>();
 
-    @OneToOne (cascade = CascadeType.ALL)
-    private Aircraft aircraft;
+    public void addFlight(FlightInfo flight) {
+        flights.add(flight);
+        flight.setAirline(this);
+    }
 
-    @ManyToMany (cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "airline", cascade = CascadeType.ALL)
+    private Set<Aircraft> aircrafts = new HashSet<>();
+
+    public void addAircraft(Aircraft aircraft) {
+        aircrafts.add(aircraft);
+        aircraft.setAirline(this);
+    }
+
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(name = "airline_service",
-            joinColumns = @JoinColumn(name = "airline_id"),
-            inverseJoinColumns = @JoinColumn(name = "service_id"))
-    private Set<Service> services;
+    joinColumns = @JoinColumn(name = "airline_id"),
+    inverseJoinColumns = @JoinColumn(name = "service_id"))
+    private Set<Service> services = new HashSet<Service>();
+
+    public void addService(Service service) {
+        services.add(service);
+    }
 
     public Airline() {
     }
@@ -40,14 +55,14 @@ public class Airline {
     public Airline(String airlineName, String airlineCode, AirlineType airlineType) {
         this.airlineName = airlineName;
         this.airlineCode = airlineCode;
-        this.airlineType = airlineType;
+        this.airlineType = airlineType.toString();
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -67,28 +82,28 @@ public class Airline {
         this.airlineCode = airlineCode;
     }
 
-    public AirlineType getAirlineType() {
+    public String getAirlineType() {
         return airlineType;
     }
 
-    public void setAirlineType(AirlineType airlineType) {
+    public void setAirlineType(String airlineType) {
         this.airlineType = airlineType;
     }
 
-    public Set<FlightInfo> getFlightInfo() {
-        return flightInfo;
+    public Set<Aircraft> getAircrafts() {
+        return aircrafts;
     }
 
-    public void setFlightInfo(Set<FlightInfo> flightInfo) {
-        this.flightInfo = flightInfo;
+    public void setAircrafts(Set<Aircraft> aircrafts) {
+        this.aircrafts = aircrafts;
     }
 
-    public Aircraft getAircraft() {
-        return aircraft;
+    public Set<FlightInfo> getFlights() {
+        return flights;
     }
 
-    public void setAircraft(Aircraft aircraft) {
-        this.aircraft = aircraft;
+    public void setFlights(Set<FlightInfo> flights) {
+        this.flights = flights;
     }
 
     public Set<Service> getServices() {
@@ -102,12 +117,11 @@ public class Airline {
     @Override
     public String toString() {
         return "Airline{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", airlineName='" + airlineName + '\'' +
                 ", airlineCode='" + airlineCode + '\'' +
-                ", airlineType=" + airlineType +
-                ", flightInfo=" + flightInfo +
-                ", aircraft=" + aircraft +
+                ", airlineType='" + airlineType + '\'' +
+                ", flights=" + flights +
                 ", services=" + services +
                 '}';
     }

@@ -1,8 +1,9 @@
 package com.demchukDS.aston.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
-import java.sql.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -10,86 +11,82 @@ import java.util.Set;
 public class Passenger {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private Long id;
+    private String id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "allergy")
+    private String allergy;
 
-    @Column(name = "surname")
-    private String surname;
+    @Column(name = "ammount_of_bagage")
+    private Double ammountOfBagage;
 
-    @Column(name = "nationality")
-    private String nationality;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "passport_id")
+    private Passport passport;
 
-    @Column(name = "date_of_birth")
-    private Date dateOfBirth;
+    @OneToMany(mappedBy = "passenger", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Set<Ticket> tickets = new HashSet<Ticket>();
 
-    @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL)
-    private Set<Passenger> passengers;
+    public void addTicket(Ticket ticket) {
+        tickets.add(ticket);
+        ticket.setPassenger(this);
+    }
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinTable(
-            name = "passenger_service",
-            joinColumns = @JoinColumn(name = "passenger_id"),
-            inverseJoinColumns = @JoinColumn(name = "service_id"))
-    private Set<Service> services;
+    @JoinTable(name = "passenger_service",
+    joinColumns = @JoinColumn(name = "passenger_id"),
+    inverseJoinColumns = @JoinColumn(name = "service_id"))
+    private Set<Service> services = new HashSet<Service>();
+
+    public void addService(Service service) {
+        services.add(service);
+    }
 
     public Passenger() {
     }
 
-    public Passenger(String name, String surname, String nationality, Date dateOfBirth) {
-        this.name = name;
-        this.surname = surname;
-        this.nationality = nationality;
-        this.dateOfBirth = dateOfBirth;
+    public Passenger(String allergy, Double ammountOfBagage) {
+        this.allergy = allergy;
+        this.ammountOfBagage = ammountOfBagage;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getAllergy() {
+        return allergy;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAllergy(String allergy) {
+        this.allergy = allergy;
     }
 
-    public String getSurname() {
-        return surname;
+    public Double getAmmountOfBagage() {
+        return ammountOfBagage;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setAmmountOfBagage(Double ammountOfBagage) {
+        this.ammountOfBagage = ammountOfBagage;
     }
 
-    public String getNationality() {
-        return nationality;
+    public Passport getPassport() {
+        return passport;
     }
 
-    public void setNationality(String nationality) {
-        this.nationality = nationality;
+    public void setPassport(Passport passport) {
+        this.passport = passport;
     }
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
+    public Set<Ticket> getTickets() {
+        return tickets;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public Set<Passenger> getPassengers() {
-        return passengers;
-    }
-
-    public void setPassengers(Set<Passenger> passengers) {
-        this.passengers = passengers;
+    public void setTickets(Set<Ticket> tickets) {
+        this.tickets = tickets;
     }
 
     public Set<Service> getServices() {
@@ -103,12 +100,11 @@ public class Passenger {
     @Override
     public String toString() {
         return "Passenger{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", nationality='" + nationality + '\'' +
-                ", dateOfBirth=" + dateOfBirth +
-                ", passengers=" + passengers +
+                "id='" + id + '\'' +
+                ", allergy='" + allergy + '\'' +
+                ", ammountOfBagage=" + ammountOfBagage +
+                ", passport=" + passport +
+                ", tickets=" + tickets +
                 ", services=" + services +
                 '}';
     }

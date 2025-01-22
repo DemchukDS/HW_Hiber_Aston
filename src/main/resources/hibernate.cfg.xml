@@ -12,6 +12,14 @@
     <property name="format_sql"> true </property>
     <property name="hibernate.dialect"> org.hibernate.dialect.PostgreSQLDialect</property>
 
-     <property name="hibernate.hbm2ddl.auto">update</property>
+    <mapping class="com.demchukDS.aston.entities.Passenger"/>
+    <mapping class="com.demchukDS.aston.entities.Ticket"/>
+    <mapping class="com.demchukDS.aston.entities.FlightInfo"/>
+    <mapping class="com.demchukDS.aston.entities.Aircraft"/>
+    <mapping class="com.demchukDS.aston.entities.Airline"/>
+    <mapping class="com.demchukDS.aston.entities.Service"/>
+    <mapping class="com.demchukDS.aston.entities.Passport"/>
+
+<!--    <property name="hibernate.hbm2ddl.auto">update</property>-->
   </session-factory>
 </hibernate-configuration>

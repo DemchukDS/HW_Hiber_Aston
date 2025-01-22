@@ -1,29 +1,37 @@
 package com.demchukDS.aston.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name ="")
+@Table(name = "aircrafts")
 public class Aircraft {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private Long id;
+    private String id;
 
-    @Column(name = "brand")
-    String brand;
+    @Column(name = "aircraft_brand")
+    private String brand;
 
     @Column(name = "model")
-    String model;
+    private String model;
 
     @Column(name = "registration_number")
-    String registrationNumber;
+    private String registrationNumber;
 
     @OneToMany(mappedBy = "aircraft", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private Set<FlightInfo> flightInfoSet;
+    private Set<FlightInfo> flights = new HashSet<>();
 
-    @OneToOne (cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    public void addFlightInfoToAircraft(FlightInfo flight) {
+        flights.add(flight);
+        flight.setAircraft(this);
+    }
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "airline_id")
     private Airline airline;
 
     public Aircraft() {
@@ -35,11 +43,19 @@ public class Aircraft {
         this.registrationNumber = registrationNumber;
     }
 
-    public Long getId() {
+    public Airline getAirline() {
+        return airline;
+    }
+
+    public void setAirline(Airline airline) {
+        this.airline = airline;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -67,31 +83,22 @@ public class Aircraft {
         this.registrationNumber = registrationNumber;
     }
 
-    public Set<FlightInfo> getFlightInfoSet() {
-        return flightInfoSet;
+    public Set<FlightInfo> getFlights() {
+        return flights;
     }
 
-    public void setFlightInfoSet(Set<FlightInfo> flightInfoSet) {
-        this.flightInfoSet = flightInfoSet;
-    }
-
-    public Airline getAirline() {
-        return airline;
-    }
-
-    public void setAirline(Airline airline) {
-        this.airline = airline;
+    public void setFlights(Set<FlightInfo> flights) {
+        this.flights = flights;
     }
 
     @Override
     public String toString() {
         return "Aircraft{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", brand='" + brand + '\'' +
                 ", model='" + model + '\'' +
                 ", registrationNumber='" + registrationNumber + '\'' +
-                ", flightInfoSet=" + flightInfoSet +
-                ", airline=" + airline +
+                ", flights=" + flights +
                 '}';
     }
 }

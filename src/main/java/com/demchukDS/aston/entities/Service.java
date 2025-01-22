@@ -1,53 +1,70 @@
 package com.demchukDS.aston.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "service")
+@Table(name = "services")
 public class Service {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private Long id;
+    private String id;
 
-    @Column(name = "name_of_service")
-    private String nameOfService;
+    @Column(name = "service_description")
+    private String description;
 
     @Column(name = "price")
-    private double price;
+    private Double price;
 
     @ManyToMany(mappedBy = "services",cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private Set<Passenger> passengers;
+    private Set<Passenger> passengers = new HashSet<Passenger>();
+
+    public void addPassenger(Passenger passenger) {
+        passengers.add(passenger);
+        passenger.getServices().add(this);
+    }
 
     @ManyToMany(mappedBy = "services", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private Set<Airline> airlines;
+    private Set<Airline> airlines = new HashSet<Airline>();
+
+    public void addAirline(Airline airline) {
+        airlines.add(airline);
+        airline.getServices().add(this);
+    }
 
     public Service() {
     }
 
-    public Long getId() {
-        return id;
+    public Service(String description, Double price) {
+        this.description = description;
+        this.price = price;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNameOfService() {
-        return nameOfService;
-    }
-
-    public void setNameOfService(String nameOfService) {
-        this.nameOfService = nameOfService;
-    }
-
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Set<Passenger> getPassengers() {
@@ -69,9 +86,8 @@ public class Service {
     @Override
     public String toString() {
         return "Service{" +
-                "id=" + id +
-                ", nameOfService='" + nameOfService + '\'' +
-                ", price=" + price +
+                "id='" + id + '\'' +
+                ", description='" + description + '\'' +
                 ", passengers=" + passengers +
                 ", airlines=" + airlines +
                 '}';
